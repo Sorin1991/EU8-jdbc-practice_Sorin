@@ -34,7 +34,7 @@ public class listOfMapExamples {
         row2.put("salary",17000);
         row2.put("job_id","AD_VP");
 
-        System.out.println(row1.toString());
+        System.out.println(row2.toString());
 
         //adding rows one by one to my list
         queryData.add(row1);
@@ -61,29 +61,40 @@ public class listOfMapExamples {
 
         Connection connection = DriverManager.getConnection(dbURL,dbUsername,dbPassword);
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM regions");
+        ResultSet resultSet = statement.executeQuery("SELECT  first_name,last_name, salary,job_id\n" +
+                "from employees\n" +
+                "where rownum <6");
+
+        //in order to get column names we need resultsetmetadata
+        ResultSetMetaData rsmd = resultSet.getMetaData();
+
 
         //creating list of keeping all the rows map
-
         List<Map<String,Object>> queryData = new ArrayList<>();
+
+        //moved to first row
+        resultSet.next();
 
         Map<String,Object> row1 = new HashMap<>();
 
-        row1.put("first_name","Steven");
-        row1.put("last_name","King");
-        row1.put("salary",24000);
-        row1.put("job_id","AD_PRES");
+        row1.put(rsmd.getColumnName(1),resultSet.getString(1));
+        row1.put(rsmd.getColumnName(2),resultSet.getString(2));
+        row1.put(rsmd.getColumnName(3),resultSet.getString(3));
+        row1.put(rsmd.getColumnName(4),resultSet.getString(4));
 
         System.out.println(row1.toString());
+
+        //move to second row
+        resultSet.next();
 
         Map<String,Object> row2= new HashMap<>();
 
-        row2.put("first_name","Neena");
-        row2.put("last_name","Kochhar");
-        row2.put("salary",17000);
-        row2.put("job_id","AD_VP");
+        row2.put(rsmd.getColumnName(1),resultSet.getString(1));
+        row2.put(rsmd.getColumnName(2),resultSet.getString(2));
+        row2.put(rsmd.getColumnName(3),resultSet.getString(3));
+        row2.put(rsmd.getColumnName(4),resultSet.getString(4));
 
-        System.out.println(row1.toString());
+        System.out.println(row2.toString());
 
         //adding rows one by one to my list
         queryData.add(row1);
